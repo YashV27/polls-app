@@ -14,6 +14,10 @@ class Question(models.Model):
 
     question_text=models.CharField(max_length=200)
     pub_date=models.DateTimeField('date published')
+	
+	recently_published.admin_order_field = 'pub_date' #sort by pub_date
+	recently_published.boolean = True
+	recently_published.short_description = 'Published Recently?'
 
 class Choice(models.Model):
     
