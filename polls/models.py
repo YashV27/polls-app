@@ -13,7 +13,8 @@ class Question(models.Model):
         return self.question_text
     
     def recently_published(self):
-        return self.pub_date>timezone.now()-datetime.timedelta(days=1)
+		now = timezone.now()
+		return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
     recently_published.admin_order_field = 'pub_date' #sort by pub_date
     recently_published.boolean = True
