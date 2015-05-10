@@ -27,17 +27,10 @@ class QuestionMethodTests(TestCase):
 		recent_question = Question(pub_date=time)
 		self.assertEqual(recent_question.recently_published(),True)
 		
-	def create_question(question_text,days):
-		time = timezone.now() + datetime.timedelta(days=days)
-		return Question.objects.create(question_text=question_text,pub_date=time)
-		
 class QuestionViewTests(TestCase):
-	def create_question(question_text,days):
-		time = timezone.now() + datetime.timedelta(days=days)
-		return Question.objects.create(question_text=question_text,pub_date=time)
 	
 	def test_index_view_with_no_questions(self):
-		response = self.client.get(reverse('polls.index'))
+		response = self.client.get(reverse('polls:index'))
 		self.assertEqual(response.status_code,200)
 		self.assertContains(response,"No polls are available")
 		self.assertQuerysetEqual(response.context['latest_question_list'],[])
@@ -45,10 +38,7 @@ class QuestionViewTests(TestCase):
 	def test_index_view_with_a_past_question(self):
 		create_question(question_text="Past question.",days=-30)
 		response = self.client.get(reverse('polls:index'))
-		self.assertQuerysetEqual(response.context
-			['latest_question_list'],
-			['<Question:Past question.>']
-		)
+		self.assertQuerysetEqual(response.context['latest_question_list'],['<Question:Past question.>'])
 	
 	def test_index_view_with_a_future_question(self):
 		create_question(question_text="Future question.", days=30)
@@ -67,12 +57,8 @@ class QuestionViewTests(TestCase):
 		create_question(question_text="Past question 2.", days=-5)
 		response = self.client.get(reverse('polls:index'))
 		self.assertQuerysetEqual(response.context['latest_question_list'],['<Question: Past question 2.>', '<Question: Past question 1.>'])
-		
-		
+				
 class QuestionIndexDetailTests(TestCase):
-	def create_question(question_text,days):
-		time = timezone.now() + datetime.timedelta(days=days)
-		return Question.objects.create(question_text=question_text,pub_date=time)
 
 	def test_detail_view_with_a_future_question(self):
 		future_question = create_question(question_text='Future question.',days=5)
