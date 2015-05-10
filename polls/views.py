@@ -5,8 +5,9 @@ from django.views import generic
 from django.utils import timezone
 
 from .models import Question,Choice
-
+	
 class IndexView(generic.ListView):
+	latest_question_list = Question.objects.order_by('-pub_date')[:5]
 	template_name = 'polls/index.html'
 	context_object_name = 'latest_question_list'
 	
