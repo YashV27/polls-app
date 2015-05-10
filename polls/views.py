@@ -6,11 +6,6 @@ from .models import Question
 
 def index(request):
 	latest_question_list = Question.objects.order_by('-pub_date')[:5]
-	
-	#Alternate - output = ','.join([p.question_text for p in latest_question_list])
-		#return HttpResponse(output)
-		#template = loader.get_template('polls/index.html')
-		
 	context = {'latest_question_list':latest_question_list}
 	return render(request,'polls/index.html',context)
 
